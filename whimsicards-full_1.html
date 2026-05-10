@@ -1,0 +1,1441 @@
+<!
+DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WooWoo Cards</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Cormorant+SC:wght@300;400;500&family=IM+Fell+English:ital@0;1&family=DM+Sans:wght@300;400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --paper: #f5f0e8;
+  --paper-dark: #ede6d6;
+  --ink: #1c1a14;
+  --ink-soft: #3d3928;
+  --ink-dim: #8a8070;
+  --gold: #b8962a;
+  --gold-light: #d4ae4a;
+  --gold-pale: #e8d48a;
+  --rust: #8a4a2a;
+  --sage: #6a7a60;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: 'DM Sans', sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Subtle paper texture overlay */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.4;
+}
+
+/* ═══════════════════════════
+   SCREENS
+═══════════════════════════ */
+.screen { display: none; position: relative; z-index: 1; }
+.screen.active { display: block; animation: pageFade 0.7s ease; }
+
+@keyframes pageFade {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ═══════════════════════════
+   LANDING PAGE
+═══════════════════════════ */
+#landing {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 24px 80px;
+}
+
+/* Top nav */
+.nav {
+  width: 100%;
+  max-width: 680px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 28px 0 0;
+  margin-bottom: 80px;
+}
+
+.nav-brand {
+  font-family: 'Cormorant SC', serif;
+  font-size: 13px;
+  font-weight: 400;
+  letter-spacing: 4px;
+  color: var(--ink);
+  text-transform: uppercase;
+}
+
+.nav-links {
+  display: flex;
+  gap: 28px;
+}
+
+.nav-link {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px;
+  letter-spacing: 2px;
+  color: var(--ink-dim);
+  text-decoration: none;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+.nav-link:hover { color: var(--ink); }
+
+/* Hero */
+.hero {
+  max-width: 560px;
+  text-align: center;
+  margin-bottom: 72px;
+}
+
+/* SVG ornament top */
+.hero-ornament {
+  margin-bottom: 32px;
+}
+
+.hero-pretitle {
+  font-family: 'Cormorant SC', serif;
+  font-size: 11px;
+  letter-spacing: 5px;
+  color: var(--gold);
+  margin-bottom: 20px;
+  display: block;
+}
+
+.hero-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(44px, 10vw, 72px);
+  font-weight: 300;
+  line-height: 1.05;
+  color: var(--ink);
+  letter-spacing: -1px;
+  margin-bottom: 8px;
+}
+
+.hero-title em {
+  font-style: italic;
+  color: var(--gold);
+}
+
+.hero-rule {
+  width: 80px;
+  height: 1px;
+  background: var(--gold);
+  margin: 24px auto;
+  opacity: 0.5;
+}
+
+.hero-body {
+  font-family: 'IM Fell English', serif;
+  font-size: 17px;
+  font-style: italic;
+  color: var(--ink-soft);
+  line-height: 1.8;
+  margin-bottom: 48px;
+  letter-spacing: 0.2px;
+}
+
+.hero-cta {
+  display: inline-block;
+  padding: 14px 44px;
+  border: 1px solid var(--ink);
+  background: transparent;
+  font-family: 'Cormorant SC', serif;
+  font-size: 12px;
+  letter-spacing: 4px;
+  color: var(--ink);
+  cursor: pointer;
+  text-transform: uppercase;
+  transition: all 0.3s;
+  position: relative;
+}
+
+.hero-cta::before {
+  content: '';
+  position: absolute;
+  inset: 3px;
+  border: 0.5px solid var(--gold);
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+.hero-cta:hover {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+/* Central illustration */
+.hero-illustration {
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto 72px;
+}
+
+/* How it works */
+.how {
+  max-width: 560px;
+  width: 100%;
+  margin-bottom: 72px;
+}
+
+.how-title {
+  font-family: 'Cormorant SC', serif;
+  font-size: 11px;
+  letter-spacing: 5px;
+  color: var(--ink-dim);
+  text-align: center;
+  margin-bottom: 40px;
+  text-transform: uppercase;
+}
+
+.how-steps {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 32px;
+}
+
+.how-step {
+  text-align: center;
+}
+
+.how-num {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 36px;
+  font-weight: 300;
+  color: var(--gold-pale);
+  display: block;
+  line-height: 1;
+  margin-bottom: 12px;
+}
+
+.how-step-title {
+  font-family: 'Cormorant SC', serif;
+  font-size: 11px;
+  letter-spacing: 2px;
+  color: var(--ink);
+  margin-bottom: 8px;
+  display: block;
+}
+
+.how-step-body {
+  font-family: 'IM Fell English', serif;
+  font-size: 13px;
+  font-style: italic;
+  color: var(--ink-dim);
+  line-height: 1.6;
+}
+
+/* Footer strip */
+.footer-strip {
+  max-width: 560px;
+  width: 100%;
+  text-align: center;
+  padding-top: 40px;
+  border-top: 0.5px solid var(--paper-dark);
+}
+
+.footer-text {
+  font-family: 'Cormorant SC', serif;
+  font-size: 10px;
+  letter-spacing: 3px;
+  color: var(--ink-dim);
+}
+
+
+/* ═══════════════════════════
+   GENERATOR FLOW
+═══════════════════════════ */
+#generator {
+  min-height: 100vh;
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 48px 24px 80px;
+}
+
+.gen-back {
+  font-family: 'Cormorant SC', serif;
+  font-size: 10px;
+  letter-spacing: 3px;
+  color: var(--ink-dim);
+  cursor: pointer;
+  margin-bottom: 48px;
+  display: inline-block;
+  text-transform: uppercase;
+}
+.gen-back:hover { color: var(--ink); }
+
+/* Progress line */
+.gen-progress {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  margin-bottom: 56px;
+  width: 100%;
+}
+
+.gen-prog-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--paper-dark);
+  flex-shrink: 0;
+  transition: background 0.3s;
+}
+.gen-prog-dot.done { background: var(--gold); }
+.gen-prog-dot.active { background: var(--ink); }
+
+.gen-prog-line {
+  flex: 1;
+  height: 0.5px;
+  background: var(--paper-dark);
+}
+
+/* Steps */
+.gen-step { display: none; }
+.gen-step.active { display: block; animation: pageFade 0.5s ease; }
+
+.gen-step-label {
+  font-family: 'Cormorant SC', serif;
+  font-size: 10px;
+  letter-spacing: 4px;
+  color: var(--gold);
+  text-transform: uppercase;
+  margin-bottom: 10px;
+  display: block;
+}
+
+.gen-step-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 32px;
+  font-weight: 300;
+  color: var(--ink);
+  line-height: 1.2;
+  margin-bottom: 8px;
+}
+
+.gen-step-sub {
+  font-family: 'IM Fell English', serif;
+  font-size: 14px;
+  font-style: italic;
+  color: var(--ink-dim);
+  margin-bottom: 36px;
+  line-height: 1.6;
+}
+
+/* Name input */
+.gen-name-input {
+  width: 100%;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--ink-dim);
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 36px;
+  font-weight: 300;
+  color: var(--ink);
+  padding: 8px 0 12px;
+  outline: none;
+  letter-spacing: 2px;
+  transition: border-color 0.3s;
+}
+.gen-name-input::placeholder {
+  color: var(--paper-dark);
+  font-style: italic;
+}
+.gen-name-input:focus { border-bottom-color: var(--ink); }
+
+/* Sign grid */
+.sign-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.sign-item {
+  border: 0.5px solid var(--paper-dark);
+  padding: 12px 6px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  background: transparent;
+}
+
+.sign-item:hover { border-color: var(--ink-dim); }
+.sign-item.selected {
+  border-color: var(--gold);
+  background: rgba(184,150,42,0.06);
+}
+
+.sign-glyph {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 20px;
+  color: var(--ink-soft);
+  display: block;
+  margin-bottom: 4px;
+}
+
+.sign-name-text {
+  font-family: 'Cormorant SC', serif;
+  font-size: 9px;
+  letter-spacing: 1px;
+  color: var(--ink-dim);
+}
+
+/* Manifest options */
+.manifest-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-bottom: 8px;
+}
+
+.manifest-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 0;
+  border-bottom: 0.5px solid var(--paper-dark);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.manifest-item:hover .manifest-item-name { color: var(--ink); }
+.manifest-item.selected .manifest-item-name { color: var(--gold); }
+.manifest-item.selected .manifest-check { opacity: 1; }
+
+.manifest-item-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 22px;
+  font-weight: 300;
+  color: var(--ink-soft);
+  transition: color 0.15s;
+}
+
+.manifest-item-latin {
+  font-family: 'IM Fell English', serif;
+  font-size: 12px;
+  font-style: italic;
+  color: var(--ink-dim);
+}
+
+.manifest-check {
+  font-size: 10px;
+  color: var(--gold);
+  opacity: 0;
+  transition: opacity 0.2s;
+  font-family: 'Cormorant SC', serif;
+  letter-spacing: 1px;
+}
+
+/* Archetype grid */
+.arch-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.arch-item {
+  border: 0.5px solid var(--paper-dark);
+  padding: 20px 16px;
+  cursor: pointer;
+  transition: all 0.2s;
+  position: relative;
+}
+
+.arch-item:hover { border-color: var(--ink-dim); }
+.arch-item.selected { border-color: var(--gold); }
+
+.arch-item-name {
+  font-family: 'Cormorant SC', serif;
+  font-size: 12px;
+  letter-spacing: 2px;
+  color: var(--ink);
+  display: block;
+  margin-bottom: 6px;
+}
+
+.arch-item-desc {
+  font-family: 'IM Fell English', serif;
+  font-size: 12px;
+  font-style: italic;
+  color: var(--ink-dim);
+  line-height: 1.5;
+}
+
+.arch-item-svg {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  opacity: 0.3;
+}
+
+/* Hair row */
+.hair-row {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+}
+
+.hair-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.hair-swatch {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1.5px solid transparent;
+  transition: all 0.2s;
+}
+
+.hair-item.selected .hair-swatch {
+  border-color: var(--gold);
+  box-shadow: 0 0 0 2px var(--paper), 0 0 0 3px var(--gold);
+}
+
+.hair-label-text {
+  font-family: 'Cormorant SC', serif;
+  font-size: 9px;
+  letter-spacing: 1px;
+  color: var(--ink-dim);
+}
+
+/* Next button */
+.gen-next {
+  width: 100%;
+  padding: 16px;
+  background: var(--ink);
+  border: none;
+  font-family: 'Cormorant SC', serif;
+  font-size: 12px;
+  letter-spacing: 4px;
+  color: var(--paper);
+  cursor: pointer;
+  text-transform: uppercase;
+  margin-top: 32px;
+  transition: all 0.2s;
+  position: relative;
+}
+.gen-next::after {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  border: 0.5px solid var(--gold);
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+.gen-next:hover::after { opacity: 0.5; }
+.gen-next:hover { background: var(--ink-soft); }
+
+.gen-err {
+  font-family: 'IM Fell English', serif;
+  font-size: 12px;
+  font-style: italic;
+  color: var(--rust);
+  margin-top: 8px;
+  min-height: 18px;
+}
+
+/* ═══════════════════════════
+   LOADING
+═══════════════════════════ */
+#loading-screen {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 24px;
+  text-align: center;
+}
+
+.loading-symbol {
+  margin-bottom: 40px;
+  animation: spin-slow 8s linear infinite;
+}
+
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.loading-main-text {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 26px;
+  font-weight: 300;
+  color: var(--ink);
+  margin-bottom: 12px;
+  min-height: 36px;
+  font-style: italic;
+}
+
+.loading-sub-text {
+  font-family: 'Cormorant SC', serif;
+  font-size: 10px;
+  letter-spacing: 4px;
+  color: var(--ink-dim);
+  min-height: 16px;
+}
+
+/* ═══════════════════════════
+   RESULT — THE CARD
+═══════════════════════════ */
+#result-screen {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 48px 24px 80px;
+}
+
+.result-pretitle {
+  font-family: 'Cormorant SC', serif;
+  font-size: 10px;
+  letter-spacing: 4px;
+  color: var(--gold);
+  margin-bottom: 40px;
+  text-transform: uppercase;
+}
+
+/* THE CARD ITSELF */
+.fate-card {
+  width: 320px;
+  background: var(--paper);
+  position: relative;
+  margin-bottom: 32px;
+  filter: drop-shadow(0 8px 32px rgba(28,26,20,0.12));
+}
+
+/* Outer border */
+.fate-card-outer {
+  position: absolute;
+  inset: 0;
+  border: 1px solid var(--gold);
+  pointer-events: none;
+  z-index: 10;
+}
+
+.fate-card-inner-border {
+  position: absolute;
+  inset: 6px;
+  border: 0.5px solid rgba(184,150,42,0.3);
+  pointer-events: none;
+  z-index: 10;
+}
+
+.fate-card-content {
+  padding: 28px 24px 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 500px;
+}
+
+/* Top of card */
+.fc-brand {
+  font-family: 'Cormorant SC', serif;
+  font-size: 8px;
+  letter-spacing: 5px;
+  color: var(--gold);
+  margin-bottom: 16px;
+  text-transform: uppercase;
+}
+
+.fc-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 38px;
+  font-weight: 300;
+  color: var(--ink);
+  letter-spacing: 3px;
+  text-align: center;
+  line-height: 1;
+  margin-bottom: 6px;
+}
+
+.fc-sign {
+  font-family: 'Cormorant SC', serif;
+  font-size: 9px;
+  letter-spacing: 4px;
+  color: var(--ink-dim);
+  margin-bottom: 20px;
+  text-transform: uppercase;
+}
+
+/* Illustration */
+.fc-illustration {
+  width: 200px;
+  margin-bottom: 20px;
+}
+
+/* Thin rules */
+.fc-rule {
+  width: 100%;
+  height: 0.5px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  margin-bottom: 16px;
+  opacity: 0.6;
+}
+
+.fc-card-name {
+  font-family: 'Cormorant SC', serif;
+  font-size: 10px;
+  letter-spacing: 3px;
+  color: var(--ink-soft);
+  text-align: center;
+  margin-bottom: 6px;
+  text-transform: uppercase;
+}
+
+.fc-power {
+  font-family: 'IM Fell English', serif;
+  font-size: 12px;
+  font-style: italic;
+  color: var(--gold);
+  text-align: center;
+  margin-bottom: 16px;
+  letter-spacing: 1px;
+}
+
+.fc-prophecy {
+  font-family: 'IM Fell English', serif;
+  font-size: 14px;
+  font-style: italic;
+  color: var(--ink-soft);
+  text-align: center;
+  line-height: 1.85;
+  margin-bottom: 20px;
+  padding: 0 4px;
+}
+
+.fc-aura-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.fc-aura-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--gold);
+}
+
+.fc-aura {
+  font-family: 'Cormorant SC', serif;
+  font-size: 9px;
+  letter-spacing: 3px;
+  color: var(--ink-dim);
+  text-transform: uppercase;
+}
+
+.fc-bottom {
+  font-family: 'Cormorant SC', serif;
+  font-size: 8px;
+  letter-spacing: 4px;
+  color: rgba(184,150,42,0.4);
+  margin-top: 16px;
+}
+
+/* Action row */
+.result-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  width: 320px;
+  margin-bottom: 16px;
+}
+
+.result-btn {
+  padding: 13px;
+  border: 0.5px solid var(--ink-dim);
+  background: transparent;
+  font-family: 'Cormorant SC', serif;
+  font-size: 10px;
+  letter-spacing: 3px;
+  color: var(--ink);
+  cursor: pointer;
+  text-transform: uppercase;
+  transition: all 0.2s;
+}
+.result-btn:hover { border-color: var(--ink); }
+.result-btn.primary { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+
+.result-new {
+  font-family: 'IM Fell English', serif;
+  font-size: 13px;
+  font-style: italic;
+  color: var(--ink-dim);
+  cursor: pointer;
+  background: none;
+  border: none;
+  margin-top: 4px;
+  transition: color 0.2s;
+}
+.result-new:hover { color: var(--ink); }
+
+</style>
+</head>
+<body>
+
+<!-- ═══ SCREEN 1: LANDING ═══ -->
+<div class="screen active" id="landing">
+  <nav class="nav">
+    <span class="nav-brand">WooWoo Cards</span>
+    <div class="nav-links">
+      <span class="nav-link" onclick="showGenerator()">Create</span>
+      <span class="nav-link">About</span>
+    </div>
+  </nav>
+
+  <div class="hero">
+    <!-- SVG ornament -->
+    <div class="hero-ornament">
+      <svg width="120" height="40" viewBox="0 0 120 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <line x1="0" y1="20" x2="48" y2="20" stroke="#b8962a" stroke-width="0.5" opacity="0.6"/>
+        <circle cx="60" cy="20" r="6" stroke="#b8962a" stroke-width="0.5" opacity="0.8"/>
+        <circle cx="60" cy="20" r="2" fill="#b8962a" opacity="0.6"/>
+        <line x1="72" y1="20" x2="120" y2="20" stroke="#b8962a" stroke-width="0.5" opacity="0.6"/>
+        <line x1="60" y1="8" x2="60" y2="32" stroke="#b8962a" stroke-width="0.5" opacity="0.4"/>
+      </svg>
+    </div>
+
+    <span class="hero-pretitle">A fate for every name</span>
+
+    <h1 class="hero-title">Your fate,<br><em>beautifully told</em></h1>
+
+    <div class="hero-rule"></div>
+
+    <p class="hero-body">
+      Give us a name, a sign, a wish.<br>
+      The stars will do the rest.
+    </p>
+
+    <button class="hero-cta" onclick="showGenerator()">
+      Reveal My Card
+    </button>
+  </div>
+
+  <!-- Central SVG illustration — Art Nouveau woman -->
+  <div class="hero-illustration">
+    <svg viewBox="0 0 400 320" xmlns="http://www.w3.org/2000/svg" fill="none">
+      <!-- Arch frame -->
+      <path d="M 80 310 L 80 160 Q 80 60 200 60 Q 320 60 320 160 L 320 310"
+            stroke="#b8962a" stroke-width="1" opacity="0.5"/>
+      <path d="M 95 310 L 95 165 Q 95 80 200 80 Q 305 80 305 165 L 305 310"
+            stroke="#b8962a" stroke-width="0.4" opacity="0.3"/>
+
+      <!-- Top medallion -->
+      <circle cx="200" cy="62" r="20" stroke="#b8962a" stroke-width="0.8" opacity="0.6"/>
+      <circle cx="200" cy="62" r="8" stroke="#b8962a" stroke-width="0.4" opacity="0.4"/>
+
+      <!-- Stars inside arch -->
+      <circle cx="140" cy="120" r="2" fill="#b8962a" opacity="0.4"/>
+      <circle cx="260" cy="110" r="2" fill="#b8962a" opacity="0.4"/>
+      <circle cx="160" cy="90" r="1.5" fill="#b8962a" opacity="0.3"/>
+      <circle cx="240" cy="95" r="1.5" fill="#b8962a" opacity="0.3"/>
+      <circle cx="200" cy="100" r="2.5" fill="#b8962a" opacity="0.5"/>
+
+      <!-- Woman silhouette — elegant line art -->
+      <!-- Head -->
+      <ellipse cx="200" cy="148" rx="18" ry="20" stroke="#1c1a14" stroke-width="1" opacity="0.7"/>
+      <!-- Hair flowing -->
+      <path d="M 185 138 Q 178 130 182 118 Q 186 108 200 112 Q 215 108 218 118 Q 222 130 215 138"
+            stroke="#1c1a14" stroke-width="1" opacity="0.6" stroke-linejoin="round"/>
+      <path d="M 182 140 Q 170 155 172 175" stroke="#1c1a14" stroke-width="1" opacity="0.4"/>
+      <path d="M 218 140 Q 230 155 228 175" stroke="#1c1a14" stroke-width="1" opacity="0.4"/>
+
+      <!-- Neck + shoulders -->
+      <line x1="200" y1="168" x2="200" y2="180" stroke="#1c1a14" stroke-width="0.8" opacity="0.6"/>
+      <path d="M 172 195 Q 186 180 200 180 Q 214 180 228 195"
+            stroke="#1c1a14" stroke-width="1" opacity="0.6"/>
+
+      <!-- Flowing dress -->
+      <path d="M 172 195 Q 168 220 165 250 Q 162 275 168 305 L 232 305 Q 238 275 235 250 Q 232 220 228 195"
+            stroke="#1c1a14" stroke-width="1" opacity="0.5"/>
+      <!-- Dress folds -->
+      <path d="M 185 210 Q 190 240 188 270" stroke="#1c1a14" stroke-width="0.4" opacity="0.3"/>
+      <path d="M 215 210 Q 210 240 212 270" stroke="#1c1a14" stroke-width="0.4" opacity="0.3"/>
+      <path d="M 200 195 Q 200 240 200 305" stroke="#1c1a14" stroke-width="0.4" opacity="0.2"/>
+
+      <!-- Arms -->
+      <path d="M 172 195 Q 155 210 148 230 Q 145 245 150 255"
+            stroke="#1c1a14" stroke-width="0.8" opacity="0.5"/>
+      <path d="M 228 195 Q 245 210 252 230 Q 255 245 250 255"
+            stroke="#1c1a14" stroke-width="0.8" opacity="0.5"/>
+
+      <!-- Moon she holds -->
+      <circle cx="252" cy="260" r="12" stroke="#b8962a" stroke-width="0.8" opacity="0.7"/>
+      <circle cx="252" cy="260" r="6" stroke="#b8962a" stroke-width="0.4" opacity="0.4"/>
+
+      <!-- Floral at feet -->
+      <path d="M 168 305 Q 160 295 155 285 Q 165 290 170 300" stroke="#b8962a" stroke-width="0.6" opacity="0.4"/>
+      <circle cx="154" cy="283" r="4" stroke="#b8962a" stroke-width="0.5" opacity="0.4"/>
+      <path d="M 232 305 Q 240 295 245 285 Q 235 290 230 300" stroke="#b8962a" stroke-width="0.6" opacity="0.4"/>
+      <circle cx="246" cy="283" r="4" stroke="#b8962a" stroke-width="0.5" opacity="0.4"/>
+
+      <!-- Small stars around woman -->
+      <text x="110" y="200" font-family="Georgia" font-size="8" fill="#b8962a" opacity="0.5">✦</text>
+      <text x="278" y="180" font-family="Georgia" font-size="6" fill="#b8962a" opacity="0.4">✦</text>
+      <text x="130" y="260" font-family="Georgia" font-size="6" fill="#b8962a" opacity="0.3">✦</text>
+    </svg>
+  </div>
+
+  <!-- How it works -->
+  <div class="how">
+    <div class="how-title">How it works</div>
+    <div class="how-steps">
+      <div class="how-step">
+        <span class="how-num">I</span>
+        <span class="how-step-title">Name & Sign</span>
+        <p class="how-step-body">Tell us who the card is for and their celestial sign.</p>
+      </div>
+      <div class="how-step">
+        <span class="how-num">II</span>
+        <span class="how-step-title">Choose Your Fate</span>
+        <p class="how-step-body">Select what she wishes to call into her life.</p>
+      </div>
+      <div class="how-step">
+        <span class="how-num">III</span>
+        <span class="how-step-title">Receive the Card</span>
+        <p class="how-step-body">A beautiful, one-of-a-kind fate card appears for her.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-strip">
+    <span class="footer-text">WooWoo Cards · Your fate, beautifully told · 2025</span>
+  </div>
+</div>
+
+
+<!-- ═══ SCREEN 2: GENERATOR ═══ -->
+<div class="screen" id="generator">
+  <div style="max-width:480px; margin:0 auto; padding:48px 24px 80px;">
+    <span class="gen-back" onclick="showLanding()">← Back</span>
+
+    <!-- Progress -->
+    <div class="gen-progress" id="gen-progress">
+      <div class="gen-prog-dot active" id="pd-0"></div>
+      <div class="gen-prog-line"></div>
+      <div class="gen-prog-dot" id="pd-1"></div>
+      <div class="gen-prog-line"></div>
+      <div class="gen-prog-dot" id="pd-2"></div>
+      <div class="gen-prog-line"></div>
+      <div class="gen-prog-dot" id="pd-3"></div>
+      <div class="gen-prog-line"></div>
+      <div class="gen-prog-dot" id="pd-4"></div>
+    </div>
+
+    <!-- Step 0: Name -->
+    <div class="gen-step active" id="gs-0">
+      <span class="gen-step-label">I · The Name</span>
+      <h2 class="gen-step-title">Who is this card for?</h2>
+      <p class="gen-step-sub">A name carries its own magic. Give us hers.</p>
+      <input class="gen-name-input" id="name-field" type="text" placeholder="Her name..." maxlength="24" autocomplete="off"/>
+      <div class="gen-err" id="err-0"></div>
+      <button class="gen-next" onclick="nextGenStep(0)">Continue</button>
+    </div>
+
+    <!-- Step 1: Sign -->
+    <div class="gen-step" id="gs-1">
+      <span class="gen-step-label">II · The Sign</span>
+      <h2 class="gen-step-title">Under which stars was she born?</h2>
+      <p class="gen-step-sub">Her celestial birthright.</p>
+      <div class="sign-grid">
+        <div class="sign-item" onclick="pickSign(this,'Aries','♈','The Ram')">
+          <span class="sign-glyph">♈</span><span class="sign-name-text">Aries</span>
+        </div>
+        <div class="sign-item" onclick="pickSign(this,'Taurus','♉','The Bull')">
+          <span class="sign-glyph">♉</span><span class="sign-name-text">Taurus</span>
+        </div>
+        <div class="sign-item" onclick="pickSign(this,'Gemini','♊','The Twins')">
+          <span class="sign-glyph">♊</span><span class="sign-name-text">Gemini</span>
+        </div>
+        <div class="sign-item" onclick="pickSign(this,'Cancer','♋','The Moon Child')">
+          <span class="sign-glyph">♋</span><span class="sign-name-text">Cancer</span>
+        </div>
+        <div class="sign-item" onclick="pickSign(this,'Leo','♌','The Sovereign')">
+          <span class="sign-glyph">♌</span><span class="sign-name-text">Leo</span>
+        </div>
+        <div class="sign-item" onclick="pickSign(this,'Virgo','♍','The Sage')">
+          <span class="sign-glyph">♍</span><span class="sign-name-text">Virgo</span>
+        </div>
+        <div class="sign-item" onclick="pickSign(this,'Libra','♎','The Scales')">
+          <span class="sign-glyph">♎</span><span class="sign-name-text">Libra</span>
+        </div>
+        <div class="sign-item" onclick="pickSign(this,'Scorpio','♏','The Soul Seeker')">
+          <span class="sign-glyph">♏</span><span class="sign-name-text">Scorpio</span>
+        </div>
+        <div class="sign-item" onclick="pickSign(this,'Sagittarius','♐','The Wanderer')">
+          <span class="sign-glyph">♐</span><span class="sign-name-text">Sagittarius</span>
+        </div>
+        <div class="sign-item" onclick="pickSign(this,'Capricorn','♑','The Mountain')">
+          <span class="sign-glyph">♑</span><span class="sign-name-text">Capricorn</span>
+        </div>
+        <div class="sign-item" onclick="pickSign(this,'Aquarius','♒','The Dreamer')">
+          <span class="sign-glyph">♒</span><span class="sign-name-text">Aquarius</span>
+        </div>
+        <div class="sign-item" onclick="pickSign(this,'Pisces','♓','The Mystic')">
+          <span class="sign-glyph">♓</span><span class="sign-name-text">Pisces</span>
+        </div>
+      </div>
+      <div class="gen-err" id="err-1"></div>
+      <button class="gen-next" onclick="nextGenStep(1)">Continue</button>
+    </div>
+
+    <!-- Step 2: Manifest -->
+    <div class="gen-step" id="gs-2">
+      <span class="gen-step-label">III · The Wish</span>
+      <h2 class="gen-step-title">What does she wish to call in?</h2>
+      <p class="gen-step-sub">The stars will align around her intention.</p>
+      <div class="manifest-list">
+        <div class="manifest-item" onclick="pickManifest(this,'Love','Amor')">
+          <span class="manifest-item-name">Love</span>
+          <span class="manifest-item-latin">Amor</span>
+          <span class="manifest-check">Selected</span>
+        </div>
+        <div class="manifest-item" onclick="pickManifest(this,'Abundance','Fortuna')">
+          <span class="manifest-item-name">Abundance</span>
+          <span class="manifest-item-latin">Fortuna</span>
+          <span class="manifest-check">Selected</span>
+        </div>
+        <div class="manifest-item" onclick="pickManifest(this,'Transformation','Metamorphosis')">
+          <span class="manifest-item-name">Transformation</span>
+          <span class="manifest-item-latin">Metamorphosis</span>
+          <span class="manifest-check">Selected</span>
+        </div>
+        <div class="manifest-item" onclick="pickManifest(this,'Protection','Aegis')">
+          <span class="manifest-item-name">Protection</span>
+          <span class="manifest-item-latin">Aegis</span>
+          <span class="manifest-check">Selected</span>
+        </div>
+        <div class="manifest-item" onclick="pickManifest(this,'Confidence','Virtus')">
+          <span class="manifest-item-name">Confidence</span>
+          <span class="manifest-item-latin">Virtus</span>
+          <span class="manifest-check">Selected</span>
+        </div>
+        <div class="manifest-item" onclick="pickManifest(this,'Intuition','Anima')">
+          <span class="manifest-item-name">Intuition</span>
+          <span class="manifest-item-latin">Anima</span>
+          <span class="manifest-check">Selected</span>
+        </div>
+        <div class="manifest-item" onclick="pickManifest(this,'New Beginnings','Aurora')">
+          <span class="manifest-item-name">New Beginnings</span>
+          <span class="manifest-item-latin">Aurora</span>
+          <span class="manifest-check">Selected</span>
+        </div>
+      </div>
+      <div class="gen-err" id="err-2"></div>
+      <button class="gen-next" onclick="nextGenStep(2)">Continue</button>
+    </div>
+
+    <!-- Step 3: Archetype -->
+    <div class="gen-step" id="gs-3">
+      <span class="gen-step-label">IV · The Archetype</span>
+      <h2 class="gen-step-title">Which spirit moves through her?</h2>
+      <p class="gen-step-sub">This will shape the soul of her card.</p>
+      <div class="arch-grid">
+        <div class="arch-item" onclick="pickArch(this,'Fairy')">
+          <svg class="arch-item-svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <path d="M12 2 L13.5 9 L20 8 L15 13 L18 20 L12 16 L6 20 L9 13 L4 8 L10.5 9 Z" stroke="#b8962a" stroke-width="0.8"/>
+          </svg>
+          <span class="arch-item-name">Fairy</span>
+          <span class="arch-item-desc">Light, wild, full of wonder</span>
+        </div>
+        <div class="arch-item" onclick="pickArch(this,'Witch')">
+          <svg class="arch-item-svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <circle cx="12" cy="12" r="9" stroke="#b8962a" stroke-width="0.8"/>
+            <path d="M12 3 L12 21 M3 12 L21 12" stroke="#b8962a" stroke-width="0.4"/>
+          </svg>
+          <span class="arch-item-name">Witch</span>
+          <span class="arch-item-desc">Ancient knowing, moon-bound</span>
+        </div>
+        <div class="arch-item" onclick="pickArch(this,'Mermaid')">
+          <svg class="arch-item-svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <path d="M12 2 Q18 8 18 14 Q18 20 12 22 Q6 20 6 14 Q6 8 12 2Z" stroke="#b8962a" stroke-width="0.8"/>
+          </svg>
+          <span class="arch-item-name">Mermaid</span>
+          <span class="arch-item-desc">Fluid, deep, untameable</span>
+        </div>
+        <div class="arch-item" onclick="pickArch(this,'Goddess')">
+          <svg class="arch-item-svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <circle cx="12" cy="12" r="5" stroke="#b8962a" stroke-width="0.8"/>
+            <circle cx="12" cy="12" r="10" stroke="#b8962a" stroke-width="0.4" stroke-dasharray="2 2"/>
+          </svg>
+          <span class="arch-item-name">Goddess</span>
+          <span class="arch-item-desc">Radiant, timeless, divine</span>
+        </div>
+        <div class="arch-item" onclick="pickArch(this,'Stargazer')">
+          <svg class="arch-item-svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <path d="M12 2 L12 22 M2 12 L22 12 M5 5 L19 19 M19 5 L5 19" stroke="#b8962a" stroke-width="0.4" opacity="0.6"/>
+            <circle cx="12" cy="12" r="3" stroke="#b8962a" stroke-width="0.8"/>
+          </svg>
+          <span class="arch-item-name">Stargazer</span>
+          <span class="arch-item-desc">Cosmic, visionary, infinite</span>
+        </div>
+        <div class="arch-item" onclick="pickArch(this,'Nymph')">
+          <svg class="arch-item-svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <path d="M6 18 Q12 6 18 18" stroke="#b8962a" stroke-width="0.8"/>
+            <path d="M4 12 Q12 2 20 12" stroke="#b8962a" stroke-width="0.4"/>
+          </svg>
+          <span class="arch-item-name">Nymph</span>
+          <span class="arch-item-desc">Nature-born, free, ethereal</span>
+        </div>
+      </div>
+      <div class="gen-err" id="err-3"></div>
+      <button class="gen-next" onclick="nextGenStep(3)">Continue</button>
+    </div>
+
+    <!-- Step 4: Hair -->
+    <div class="gen-step" id="gs-4">
+      <span class="gen-step-label">V · The Appearance</span>
+      <h2 class="gen-step-title">Her hair colour?</h2>
+      <p class="gen-step-sub">The final touch before we call her card forth.</p>
+      <div class="hair-row">
+        <div class="hair-item" onclick="pickHair(this,'raven black')">
+          <div class="hair-swatch" style="background:#1a1a1a;"></div>
+          <span class="hair-label-text">Raven</span>
+        </div>
+        <div class="hair-item" onclick="pickHair(this,'deep brown')">
+          <div class="hair-swatch" style="background:#5c3d1e;"></div>
+          <span class="hair-label-text">Brown</span>
+        </div>
+        <div class="hair-item" onclick="pickHair(this,'warm auburn')">
+          <div class="hair-swatch" style="background:#8b3a1a;"></div>
+          <span class="hair-label-text">Auburn</span>
+        </div>
+        <div class="hair-item" onclick="pickHair(this,'golden blonde')">
+          <div class="hair-swatch" style="background:#c8a440;"></div>
+          <span class="hair-label-text">Golden</span>
+        </div>
+        <div class="hair-item" onclick="pickHair(this,'silver white')">
+          <div class="hair-swatch" style="background:#c8c4bc;"></div>
+          <span class="hair-label-text">Silver</span>
+        </div>
+        <div class="hair-item" onclick="pickHair(this,'rose copper')">
+          <div class="hair-swatch" style="background:#c07060;"></div>
+          <span class="hair-label-text">Rose</span>
+        </div>
+      </div>
+      <div class="gen-err" id="err-4"></div>
+      <button class="gen-next" onclick="generateFate()">Reveal Her Fate</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══ SCREEN 3: LOADING ═══ -->
+<div class="screen" id="loading-screen">
+  <div style="min-height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:40px 24px; text-align:center;">
+    <div class="loading-symbol">
+      <svg width="60" height="60" viewBox="0 0 60 60" fill="none">
+        <circle cx="30" cy="30" r="26" stroke="#b8962a" stroke-width="0.8" opacity="0.4"/>
+        <circle cx="30" cy="30" r="18" stroke="#b8962a" stroke-width="0.5" opacity="0.3"/>
+        <circle cx="30" cy="30" r="4" fill="#b8962a" opacity="0.6"/>
+        <line x1="30" y1="2" x2="30" y2="10" stroke="#b8962a" stroke-width="0.8" opacity="0.6"/>
+        <line x1="30" y1="50" x2="30" y2="58" stroke="#b8962a" stroke-width="0.8" opacity="0.6"/>
+        <line x1="2" y1="30" x2="10" y2="30" stroke="#b8962a" stroke-width="0.8" opacity="0.6"/>
+        <line x1="50" y1="30" x2="58" y2="30" stroke="#b8962a" stroke-width="0.8" opacity="0.6"/>
+        <line x1="9" y1="9" x2="15" y2="15" stroke="#b8962a" stroke-width="0.6" opacity="0.4"/>
+        <line x1="51" y1="9" x2="45" y2="15" stroke="#b8962a" stroke-width="0.6" opacity="0.4"/>
+        <line x1="9" y1="51" x2="15" y2="45" stroke="#b8962a" stroke-width="0.6" opacity="0.4"/>
+        <line x1="51" y1="51" x2="45" y2="45" stroke="#b8962a" stroke-width="0.6" opacity="0.4"/>
+      </svg>
+    </div>
+    <div class="loading-main-text" id="loading-main">Reading the stars for her...</div>
+    <div class="loading-sub-text" id="loading-sub">Please wait</div>
+  </div>
+</div>
+
+
+<!-- ═══ SCREEN 4: RESULT ═══ -->
+<div class="screen" id="result-screen">
+  <span class="result-pretitle">Her fate card has arrived</span>
+
+  <div class="fate-card" id="fate-card">
+    <div class="fate-card-outer"></div>
+    <div class="fate-card-inner-border"></div>
+    <div class="fate-card-content">
+
+      <!-- Top ornament SVG -->
+      <svg width="200" height="28" viewBox="0 0 200 28" fill="none" style="margin-bottom:12px;">
+        <line x1="0" y1="14" x2="85" y2="14" stroke="#b8962a" stroke-width="0.5" opacity="0.5"/>
+        <circle cx="100" cy="14" r="6" stroke="#b8962a" stroke-width="0.5" opacity="0.6"/>
+        <line x1="115" y1="14" x2="200" y2="14" stroke="#b8962a" stroke-width="0.5" opacity="0.5"/>
+        <circle cx="100" cy="14" r="2" fill="#b8962a" opacity="0.5"/>
+        <path d="M92 6 L100 14 L108 6" stroke="#b8962a" stroke-width="0.4" opacity="0.3" fill="none"/>
+        <path d="M92 22 L100 14 L108 22" stroke="#b8962a" stroke-width="0.4" opacity="0.3" fill="none"/>
+      </svg>
+
+      <div class="fc-brand">WooWoo Cards</div>
+      <div class="fc-name" id="fc-name">Nikola</div>
+      <div class="fc-sign" id="fc-sign">Scorpio · The Soul Seeker</div>
+
+      <!-- Illustration placeholder — changes per archetype -->
+      <svg class="fc-illustration" id="fc-illustration" viewBox="0 0 200 180" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- Woman figure - Art Nouveau style line art -->
+        <ellipse cx="100" cy="52" rx="14" ry="15" stroke="#3d3928" stroke-width="0.8" opacity="0.8"/>
+        <path d="M 89 44 Q 84 34 88 26 Q 92 18 100 20 Q 108 18 112 26 Q 116 34 111 44"
+              stroke="#3d3928" stroke-width="0.8" opacity="0.6"/>
+        <path d="M 87 47 Q 76 58 78 72" stroke="#3d3928" stroke-width="0.7" opacity="0.4"/>
+        <path d="M 113 47 Q 124 58 122 72" stroke="#3d3928" stroke-width="0.7" opacity="0.4"/>
+        <line x1="100" y1="67" x2="100" y2="76" stroke="#3d3928" stroke-width="0.7" opacity="0.6"/>
+        <path d="M 80 88 Q 90 76 100 76 Q 110 76 120 88"
+              stroke="#3d3928" stroke-width="0.8" opacity="0.6"/>
+        <path d="M 80 88 Q 76 108 75 130 Q 74 152 78 175 L 122 175 Q 126 152 125 130 Q 124 108 120 88"
+              stroke="#3d3928" stroke-width="0.8" opacity="0.5"/>
+        <path d="M 90 95 Q 93 120 91 148" stroke="#3d3928" stroke-width="0.3" opacity="0.25"/>
+        <path d="M 110 95 Q 107 120 109 148" stroke="#3d3928" stroke-width="0.3" opacity="0.25"/>
+        <path d="M 80 88 Q 66 98 60 115 Q 57 128 62 138"
+              stroke="#3d3928" stroke-width="0.7" opacity="0.5"/>
+        <path d="M 120 88 Q 134 98 140 115 Q 143 128 138 138"
+              stroke="#3d3928" stroke-width="0.7" opacity="0.5"/>
+        <!-- Moon / orb held -->
+        <circle cx="138" cy="142" r="10" stroke="#b8962a" stroke-width="0.8" opacity="0.7"/>
+        <circle cx="138" cy="142" r="5" stroke="#b8962a" stroke-width="0.4" opacity="0.4"/>
+        <!-- Flowing hair detail -->
+        <path d="M 89 44 Q 78 52 80 66 Q 82 74 78 80" stroke="#3d3928" stroke-width="0.5" opacity="0.3"/>
+        <path d="M 111 44 Q 122 52 120 66 Q 118 74 122 80" stroke="#3d3928" stroke-width="0.5" opacity="0.3"/>
+        <!-- Small stars -->
+        <circle cx="52" cy="80" r="1.5" fill="#b8962a" opacity="0.4"/>
+        <circle cx="148" cy="60" r="1.5" fill="#b8962a" opacity="0.4"/>
+        <circle cx="40" cy="130" r="1" fill="#b8962a" opacity="0.3"/>
+        <circle cx="160" cy="110" r="1" fill="#b8962a" opacity="0.3"/>
+        <!-- Bottom florals -->
+        <path d="M 78 175 Q 68 165 62 155 Q 72 160 76 168" stroke="#b8962a" stroke-width="0.5" opacity="0.4"/>
+        <circle cx="60" cy="153" r="5" stroke="#b8962a" stroke-width="0.5" opacity="0.4"/>
+        <path d="M 122 175 Q 132 165 138 155 Q 128 160 124 168" stroke="#b8962a" stroke-width="0.5" opacity="0.4"/>
+        <circle cx="140" cy="153" r="5" stroke="#b8962a" stroke-width="0.5" opacity="0.4"/>
+      </svg>
+
+      <div class="fc-rule"></div>
+      <div class="fc-card-name" id="fc-card-name">The Keeper of Tides</div>
+      <div class="fc-power" id="fc-power">Lunaris Perpetua</div>
+
+      <div class="fc-prophecy" id="fc-prophecy">
+        Nikola, what you have been quietly building in the dark is about to find its light. The stars have not forgotten you — they have been watching, and waiting, for exactly this moment.
+      </div>
+
+      <div class="fc-rule"></div>
+
+      <div class="fc-aura-row">
+        <div class="fc-aura-dot"></div>
+        <div class="fc-aura" id="fc-aura">Aura: Indigo & Gold</div>
+        <div class="fc-aura-dot"></div>
+      </div>
+
+      <!-- Bottom ornament -->
+      <svg width="120" height="20" viewBox="0 0 120 20" fill="none" style="margin-top:12px;">
+        <line x1="0" y1="10" x2="50" y2="10" stroke="#b8962a" stroke-width="0.4" opacity="0.4"/>
+        <circle cx="60" cy="10" r="3" stroke="#b8962a" stroke-width="0.5" opacity="0.5"/>
+        <line x1="70" y1="10" x2="120" y2="10" stroke="#b8962a" stroke-width="0.4" opacity="0.4"/>
+      </svg>
+
+      <div class="fc-bottom">woowoocards.com</div>
+    </div>
+  </div>
+
+  <div class="result-actions">
+    <button class="result-btn primary" onclick="downloadResult()">Save Card</button>
+    <button class="result-btn" onclick="shareResult()">Share</button>
+  </div>
+  <button class="result-new" onclick="showGenerator()">Create another card →</button>
+</div>
+
+
+<script>
+// State
+const S = { name:'', sign:'', signGlyph:'', signEpithet:'', manifest:'', manifestLatin:'', archetype:'', hair:'' };
+let step = 0;
+
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0,0);
+}
+
+function showLanding() { showScreen('landing'); }
+function showGenerator() { step = 0; updateProgress(); showScreen('generator'); }
+
+function updateProgress() {
+  for(let i=0;i<5;i++){
+    const d = document.getElementById('pd-'+i);
+    d.classList.remove('active','done');
+    if(i < step) d.classList.add('done');
+    else if(i === step) d.classList.add('active');
+  }
+}
+
+function pickSign(el, name, glyph, epithet) {
+  document.querySelectorAll('.sign-item').forEach(e => e.classList.remove('selected'));
+  el.classList.add('selected');
+  S.sign = name; S.signGlyph = glyph; S.signEpithet = epithet;
+}
+
+function pickManifest(el, name, latin) {
+  document.querySelectorAll('.manifest-item').forEach(e => e.classList.remove('selected'));
+  el.classList.add('selected');
+  S.manifest = name; S.manifestLatin = latin;
+}
+
+function pickArch(el, name) {
+  document.querySelectorAll('.arch-item').forEach(e => e.classList.remove('selected'));
+  el.classList.add('selected');
+  S.archetype = name;
+}
+
+function pickHair(el, name) {
+  document.querySelectorAll('.hair-item').forEach(e => e.classList.remove('selected'));
+  el.classList.add('selected');
+  S.hair = name;
+}
+
+function nextGenStep(from) {
+  const errs = { 0:'A name is required.', 1:'Please choose her sign.', 2:'Choose what she wishes to call in.', 3:'Choose her archetype.', 4:'Choose her hair.' };
+  if(from===0){ S.name = document.getElementById('name-field').value.trim(); if(!S.name){document.getElementById('err-0').textContent=errs[0];return;} }
+  if(from===1 && !S.sign){document.getElementById('err-1').textContent=errs[1];return;}
+  if(from===2 && !S.manifest){document.getElementById('err-2').textContent=errs[2];return;}
+  if(from===3 && !S.archetype){document.getElementById('err-3').textContent=errs[3];return;}
+
+  document.getElementById('gs-'+from).classList.remove('active');
+  step = from+1;
+  updateProgress();
+  document.getElementById('gs-'+step).classList.add('active');
+  document.getElementById('err-'+from).textContent='';
+}
+
+const loadingLines = [
+  [`Searching the stars for ${()=>S.name}...`, 'The celestial map is turning'],
+  [`Reading the signs for ${()=>S.sign}...`, 'Ancient patterns emerging'],
+  [`Weaving the fate of a ${()=>S.archetype}...`, 'The card takes its form'],
+  ['The ink dries on your fate...', 'Almost ready'],
+];
+
+async function generateFate() {
+  if(!S.hair){ document.getElementById('err-4').textContent='Choose her hair.'; return; }
+
+  showScreen('loading-screen');
+
+  let idx = 0;
+  const msgs = [
+    [`Searching the stars for ${S.name}...`, 'The celestial map is turning'],
+    [`Reading the signs for ${S.sign}...`, 'Ancient patterns emerging'],
+    [`Weaving the fate of a ${S.archetype}...`, 'The card takes its form'],
+    ['The ink dries on her fate...', 'Almost ready'],
+  ];
+
+  const interval = setInterval(() => {
+    if(idx < msgs.length){
+      document.getElementById('loading-main').textContent = msgs[idx][0];
+      document.getElementById('loading-sub').textContent = msgs[idx][1];
+      idx++;
+    }
+  }, 900);
+
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        messages: [{
+          role: 'user',
+          content: `You are a poetic fate card oracle. Create a fate card for ${S.name}.
+
+Sign: ${S.sign} (${S.signEpithet})
+Manifestation wish: ${S.manifest} (${S.manifestLatin})
+Archetype: ${S.archetype}
+Hair: ${S.hair}
+
+Return ONLY a JSON object, no markdown, no backticks:
+{
+  "cardName": "The [poetic title, 3-5 words, elegant, eg 'The Keeper of Tides']",
+  "powerWord": "One Latin or poetic phrase (eg 'Lunaris Perpetua', 'Flos Aeterna')",
+  "prophecy": "Three sentences. Personal, poetic, uses her name ${S.name} in the first sentence. About ${S.manifest}. Speaks to her ${S.archetype} spirit. Elegant, never generic. Like Aesop copy — beautiful and slightly mysterious.",
+  "aura": "Two colours that feel like her, poetic names (eg 'Indigo & Pale Gold', 'Ash Rose & Sage')"
+}`
+        }]
+      })
+    });
+
+    clearInterval(interval);
+    const data = await res.json();
+    const text = data.content[0].text.trim().replace(/```json|```/g,'').trim();
+    const card = JSON.parse(text);
+    renderCard(card);
+
+  } catch(e) {
+    clearInterval(interval);
+    renderCard({
+      cardName: `The ${S.archetype} of ${S.sign}`,
+      powerWord: S.manifestLatin + ' Aeterna',
+      prophecy: `${S.name}, the stars have held your name with care since long before this moment. What you seek in ${S.manifest.toLowerCase()} is not far — it has been walking toward you all along. Trust the part of yourself that already knows this to be true.`,
+      aura: 'Soft Gold & Midnight Blue'
+    });
+  }
+}
+
+function renderCard(card) {
+  document.getElementById('fc-name').textContent = S.name.toUpperCase();
+  document.getElementById('fc-sign').textContent = `${S.sign} · ${S.signEpithet}`;
+  document.getElementById('fc-card-name').textContent = card.cardName;
+  document.getElementById('fc-power').textContent = card.powerWord;
+  document.getElementById('fc-prophecy').textContent = card.prophecy;
+  document.getElementById('fc-aura').textContent = `Aura: ${card.aura}`;
+  showScreen('result-screen');
+}
+
+function downloadResult() {
+  const w = window.open('','_blank');
+  const cardHtml = document.getElementById('fate-card').outerHTML;
+  w.document.write(`<!DOCTYPE html><html><head>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;1,300;1,400&family=Cormorant+SC:wght@300;400&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet">
+  <style>
+    :root{--paper:#f5f0e8;--ink:#1c1a14;--ink-soft:#3d3928;--ink-dim:#8a8070;--gold:#b8962a;--gold-pale:#e8d48a;}
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{background:#f5f0e8;display:flex;align-items:center;justify-content:center;min-height:100vh;padding:40px;}
+    ${Array.from(document.styleSheets[0].cssRules).map(r=>r.cssText).join('\n')}
+  </style></head><body>${cardHtml}
+  <script>window.onload=()=>window.print()<\/script></body></html>`);
+  w.document.close();
+}
+
+function shareResult() {
+  if(navigator.share) {
+    navigator.share({ title:`${S.name}'s Fate Card`, text:`✦ My WooWoo Cards fate card`, url: window.location.href });
+  } else {
+    navigator.clipboard.writeText(window.location.href);
+    alert('Link copied.');
+  }
+}
+</script>
+
+</body>
+</html>
