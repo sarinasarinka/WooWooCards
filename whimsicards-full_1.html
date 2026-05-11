@@ -56,22 +56,24 @@ body::before {
    LANDING PAGE
 ═══════════════════════════ */
 #landing {
-  min-height: 100vh;
-  display: flex;
+  height: 100vh;
   flex-direction: column;
   align-items: center;
-  padding: 0 24px 80px;
+  justify-content: center;
+  padding: 0 24px;
+  position: relative;
 }
+#landing.active { display: flex; }
 
 /* Top nav */
 .nav {
-  width: 100%;
-  max-width: 680px;
+  position: absolute;
+  top: 28px;
+  left: 0;
+  right: 0;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
-  padding: 28px 0 0;
-  margin-bottom: 80px;
 }
 
 .nav-brand {
@@ -104,7 +106,6 @@ body::before {
 .hero {
   max-width: 560px;
   text-align: center;
-  margin-bottom: 72px;
 }
 
 /* SVG ornament top */
@@ -123,12 +124,20 @@ body::before {
 
 .hero-title {
   font-family: 'Cormorant Garamond', serif;
-  font-size: clamp(44px, 10vw, 72px);
+  font-size: clamp(36px, 7vw, 58px);
   font-weight: 300;
-  line-height: 1.05;
+  line-height: 1.1;
   color: var(--ink);
-  letter-spacing: -1px;
-  margin-bottom: 8px;
+  letter-spacing: -0.5px;
+  margin-bottom: 20px;
+}
+
+.hero-sub {
+  font-family: 'Cormorant SC', serif;
+  font-size: 13px;
+  letter-spacing: 3px;
+  color: var(--ink-dim);
+  margin-bottom: 16px;
 }
 
 .hero-title em {
@@ -258,6 +267,67 @@ body::before {
   font-size: 10px;
   letter-spacing: 3px;
   color: var(--ink-dim);
+}
+
+
+/* ═══════════════════════════
+   WHO SCREEN
+═══════════════════════════ */
+#who-screen {
+  height: 100vh;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+#who-screen.active { display: flex; }
+
+.who-wrap {
+  text-align: center;
+  max-width: 400px;
+  padding: 0 24px;
+}
+
+.who-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(32px, 6vw, 52px);
+  font-weight: 300;
+  color: var(--ink);
+  line-height: 1.2;
+  margin-bottom: 52px;
+}
+
+.who-buttons {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.who-btn {
+  padding: 16px;
+  border: 1px solid var(--ink);
+  background: transparent;
+  font-family: 'Cormorant SC', serif;
+  font-size: 12px;
+  letter-spacing: 4px;
+  color: var(--ink);
+  cursor: pointer;
+  text-transform: uppercase;
+  transition: all 0.3s;
+  position: relative;
+}
+
+.who-btn::before {
+  content: '';
+  position: absolute;
+  inset: 3px;
+  border: 0.5px solid var(--gold);
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+.who-btn:hover {
+  background: var(--ink);
+  color: var(--paper);
 }
 
 
@@ -489,11 +559,11 @@ body::before {
   opacity: 0.3;
 }
 
-/* Hair row */
+/* Hair grid */
 .hair-row {
-  display: flex;
-  gap: 12px;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px 12px;
   margin-bottom: 8px;
 }
 
@@ -566,13 +636,13 @@ body::before {
 ═══════════════════════════ */
 #loading-screen {
   min-height: 100vh;
-  display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   padding: 40px 24px;
   text-align: center;
 }
+#loading-screen.active { display: flex; }
 
 .loading-symbol {
   margin-bottom: 40px;
@@ -607,11 +677,11 @@ body::before {
 ═══════════════════════════ */
 #result-screen {
   min-height: 100vh;
-  display: flex;
   flex-direction: column;
   align-items: center;
   padding: 48px 24px 80px;
 }
+#result-screen.active { display: flex; }
 
 .result-pretitle {
   font-family: 'Cormorant SC', serif;
@@ -807,129 +877,34 @@ body::before {
 <div class="screen active" id="landing">
   <nav class="nav">
     <span class="nav-brand">WooWoo Cards</span>
-    <div class="nav-links">
-      <span class="nav-link" onclick="showGenerator()">Create</span>
-      <span class="nav-link">About</span>
-    </div>
   </nav>
 
   <div class="hero">
-    <!-- SVG ornament -->
-    <div class="hero-ornament">
-      <svg width="120" height="40" viewBox="0 0 120 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <line x1="0" y1="20" x2="48" y2="20" stroke="#b8962a" stroke-width="0.5" opacity="0.6"/>
-        <circle cx="60" cy="20" r="6" stroke="#b8962a" stroke-width="0.5" opacity="0.8"/>
-        <circle cx="60" cy="20" r="2" fill="#b8962a" opacity="0.6"/>
-        <line x1="72" y1="20" x2="120" y2="20" stroke="#b8962a" stroke-width="0.5" opacity="0.6"/>
-        <line x1="60" y1="8" x2="60" y2="32" stroke="#b8962a" stroke-width="0.5" opacity="0.4"/>
-      </svg>
-    </div>
+    <h1 class="hero-title">You've been waiting<br>for a sign.<br><em>Here it is.</em></h1>
 
-    <span class="hero-pretitle">A fate for every name</span>
-
-    <h1 class="hero-title">Your fate,<br><em>beautifully told</em></h1>
-
-    <div class="hero-rule"></div>
+    <p class="hero-sub">Create your personal manifestation card.</p>
 
     <p class="hero-body">
       Give us a name, a sign, a wish.<br>
       The stars will do the rest.
     </p>
 
-    <button class="hero-cta" onclick="showGenerator()">
-      Reveal My Card
+    <button class="hero-cta" onclick="showWho()">
+      Cast My Intention
     </button>
   </div>
 
-  <!-- Central SVG illustration — Art Nouveau woman -->
-  <div class="hero-illustration">
-    <svg viewBox="0 0 400 320" xmlns="http://www.w3.org/2000/svg" fill="none">
-      <!-- Arch frame -->
-      <path d="M 80 310 L 80 160 Q 80 60 200 60 Q 320 60 320 160 L 320 310"
-            stroke="#b8962a" stroke-width="1" opacity="0.5"/>
-      <path d="M 95 310 L 95 165 Q 95 80 200 80 Q 305 80 305 165 L 305 310"
-            stroke="#b8962a" stroke-width="0.4" opacity="0.3"/>
+</div>
 
-      <!-- Top medallion -->
-      <circle cx="200" cy="62" r="20" stroke="#b8962a" stroke-width="0.8" opacity="0.6"/>
-      <circle cx="200" cy="62" r="8" stroke="#b8962a" stroke-width="0.4" opacity="0.4"/>
 
-      <!-- Stars inside arch -->
-      <circle cx="140" cy="120" r="2" fill="#b8962a" opacity="0.4"/>
-      <circle cx="260" cy="110" r="2" fill="#b8962a" opacity="0.4"/>
-      <circle cx="160" cy="90" r="1.5" fill="#b8962a" opacity="0.3"/>
-      <circle cx="240" cy="95" r="1.5" fill="#b8962a" opacity="0.3"/>
-      <circle cx="200" cy="100" r="2.5" fill="#b8962a" opacity="0.5"/>
-
-      <!-- Woman silhouette — elegant line art -->
-      <!-- Head -->
-      <ellipse cx="200" cy="148" rx="18" ry="20" stroke="#1c1a14" stroke-width="1" opacity="0.7"/>
-      <!-- Hair flowing -->
-      <path d="M 185 138 Q 178 130 182 118 Q 186 108 200 112 Q 215 108 218 118 Q 222 130 215 138"
-            stroke="#1c1a14" stroke-width="1" opacity="0.6" stroke-linejoin="round"/>
-      <path d="M 182 140 Q 170 155 172 175" stroke="#1c1a14" stroke-width="1" opacity="0.4"/>
-      <path d="M 218 140 Q 230 155 228 175" stroke="#1c1a14" stroke-width="1" opacity="0.4"/>
-
-      <!-- Neck + shoulders -->
-      <line x1="200" y1="168" x2="200" y2="180" stroke="#1c1a14" stroke-width="0.8" opacity="0.6"/>
-      <path d="M 172 195 Q 186 180 200 180 Q 214 180 228 195"
-            stroke="#1c1a14" stroke-width="1" opacity="0.6"/>
-
-      <!-- Flowing dress -->
-      <path d="M 172 195 Q 168 220 165 250 Q 162 275 168 305 L 232 305 Q 238 275 235 250 Q 232 220 228 195"
-            stroke="#1c1a14" stroke-width="1" opacity="0.5"/>
-      <!-- Dress folds -->
-      <path d="M 185 210 Q 190 240 188 270" stroke="#1c1a14" stroke-width="0.4" opacity="0.3"/>
-      <path d="M 215 210 Q 210 240 212 270" stroke="#1c1a14" stroke-width="0.4" opacity="0.3"/>
-      <path d="M 200 195 Q 200 240 200 305" stroke="#1c1a14" stroke-width="0.4" opacity="0.2"/>
-
-      <!-- Arms -->
-      <path d="M 172 195 Q 155 210 148 230 Q 145 245 150 255"
-            stroke="#1c1a14" stroke-width="0.8" opacity="0.5"/>
-      <path d="M 228 195 Q 245 210 252 230 Q 255 245 250 255"
-            stroke="#1c1a14" stroke-width="0.8" opacity="0.5"/>
-
-      <!-- Moon she holds -->
-      <circle cx="252" cy="260" r="12" stroke="#b8962a" stroke-width="0.8" opacity="0.7"/>
-      <circle cx="252" cy="260" r="6" stroke="#b8962a" stroke-width="0.4" opacity="0.4"/>
-
-      <!-- Floral at feet -->
-      <path d="M 168 305 Q 160 295 155 285 Q 165 290 170 300" stroke="#b8962a" stroke-width="0.6" opacity="0.4"/>
-      <circle cx="154" cy="283" r="4" stroke="#b8962a" stroke-width="0.5" opacity="0.4"/>
-      <path d="M 232 305 Q 240 295 245 285 Q 235 290 230 300" stroke="#b8962a" stroke-width="0.6" opacity="0.4"/>
-      <circle cx="246" cy="283" r="4" stroke="#b8962a" stroke-width="0.5" opacity="0.4"/>
-
-      <!-- Small stars around woman -->
-      <text x="110" y="200" font-family="Georgia" font-size="8" fill="#b8962a" opacity="0.5">✦</text>
-      <text x="278" y="180" font-family="Georgia" font-size="6" fill="#b8962a" opacity="0.4">✦</text>
-      <text x="130" y="260" font-family="Georgia" font-size="6" fill="#b8962a" opacity="0.3">✦</text>
-    </svg>
-  </div>
-
-  <!-- How it works -->
-  <div class="how">
-    <div class="how-title">How it works</div>
-    <div class="how-steps">
-      <div class="how-step">
-        <span class="how-num">I</span>
-        <span class="how-step-title">Name & Sign</span>
-        <p class="how-step-body">Tell us who the card is for and their celestial sign.</p>
-      </div>
-      <div class="how-step">
-        <span class="how-num">II</span>
-        <span class="how-step-title">Choose Your Fate</span>
-        <p class="how-step-body">Select what she wishes to call into her life.</p>
-      </div>
-      <div class="how-step">
-        <span class="how-num">III</span>
-        <span class="how-step-title">Receive the Card</span>
-        <p class="how-step-body">A beautiful, one-of-a-kind fate card appears for her.</p>
-      </div>
+<!-- ═══ WHO SCREEN ═══ -->
+<div class="screen" id="who-screen">
+  <div class="who-wrap">
+    <h2 class="who-title">Who is this card for?</h2>
+    <div class="who-buttons">
+      <button class="who-btn" onclick="setPerson('me')">For me</button>
+      <button class="who-btn" onclick="setPerson('her')">For her</button>
     </div>
-  </div>
-
-  <div class="footer-strip">
-    <span class="footer-text">WooWoo Cards · Your fate, beautifully told · 2025</span>
   </div>
 </div>
 
@@ -1091,21 +1066,22 @@ body::before {
           <span class="arch-item-name">Goddess</span>
           <span class="arch-item-desc">Radiant, timeless, divine</span>
         </div>
-        <div class="arch-item" onclick="pickArch(this,'Stargazer')">
+        <div class="arch-item" onclick="pickArch(this,'Empress')">
           <svg class="arch-item-svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-            <path d="M12 2 L12 22 M2 12 L22 12 M5 5 L19 19 M19 5 L5 19" stroke="#b8962a" stroke-width="0.4" opacity="0.6"/>
-            <circle cx="12" cy="12" r="3" stroke="#b8962a" stroke-width="0.8"/>
+            <path d="M4 18 L4 11 L8 15 L12 4 L16 15 L20 11 L20 18 Z" stroke="#b8962a" stroke-width="0.8"/>
+            <line x1="2" y1="20" x2="22" y2="20" stroke="#b8962a" stroke-width="0.5"/>
           </svg>
-          <span class="arch-item-name">Stargazer</span>
-          <span class="arch-item-desc">Cosmic, visionary, infinite</span>
+          <span class="arch-item-name">Empress</span>
+          <span class="arch-item-desc">Powerful, elegant, sovereign</span>
         </div>
-        <div class="arch-item" onclick="pickArch(this,'Nymph')">
+        <div class="arch-item" onclick="pickArch(this,'Archer')">
           <svg class="arch-item-svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-            <path d="M6 18 Q12 6 18 18" stroke="#b8962a" stroke-width="0.8"/>
-            <path d="M4 12 Q12 2 20 12" stroke="#b8962a" stroke-width="0.4"/>
+            <path d="M19 4 Q22 12 19 20" stroke="#b8962a" stroke-width="0.8"/>
+            <line x1="19" y1="4" x2="4" y2="19" stroke="#b8962a" stroke-width="0.8"/>
+            <path d="M4 14 L4 19 L9 19" stroke="#b8962a" stroke-width="0.6"/>
           </svg>
-          <span class="arch-item-name">Nymph</span>
-          <span class="arch-item-desc">Nature-born, free, ethereal</span>
+          <span class="arch-item-name">Archer</span>
+          <span class="arch-item-desc">Precise, bold, unstoppable</span>
         </div>
       </div>
       <div class="gen-err" id="err-3"></div>
@@ -1122,9 +1098,9 @@ body::before {
           <div class="hair-swatch" style="background:#1a1a1a;"></div>
           <span class="hair-label-text">Raven</span>
         </div>
-        <div class="hair-item" onclick="pickHair(this,'deep brown')">
-          <div class="hair-swatch" style="background:#5c3d1e;"></div>
-          <span class="hair-label-text">Brown</span>
+        <div class="hair-item" onclick="pickHair(this,'chestnut brown')">
+          <div class="hair-swatch" style="background:#6b3a2a;"></div>
+          <span class="hair-label-text">Chestnut</span>
         </div>
         <div class="hair-item" onclick="pickHair(this,'warm auburn')">
           <div class="hair-swatch" style="background:#8b3a1a;"></div>
@@ -1134,13 +1110,21 @@ body::before {
           <div class="hair-swatch" style="background:#c8a440;"></div>
           <span class="hair-label-text">Golden</span>
         </div>
-        <div class="hair-item" onclick="pickHair(this,'silver white')">
-          <div class="hair-swatch" style="background:#c8c4bc;"></div>
+        <div class="hair-item" onclick="pickHair(this,'silver grey')">
+          <div class="hair-swatch" style="background:#b0aca4;"></div>
           <span class="hair-label-text">Silver</span>
         </div>
-        <div class="hair-item" onclick="pickHair(this,'rose copper')">
-          <div class="hair-swatch" style="background:#c07060;"></div>
+        <div class="hair-item" onclick="pickHair(this,'rose pink')">
+          <div class="hair-swatch" style="background:#c07878;"></div>
           <span class="hair-label-text">Rose</span>
+        </div>
+        <div class="hair-item" onclick="pickHair(this,'violet purple')">
+          <div class="hair-swatch" style="background:#7a5090;"></div>
+          <span class="hair-label-text">Violet</span>
+        </div>
+        <div class="hair-item" onclick="pickHair(this,'midnight blue')">
+          <div class="hair-swatch" style="background:#2a3a7a;"></div>
+          <span class="hair-label-text">Midnight</span>
         </div>
       </div>
       <div class="gen-err" id="err-4"></div>
@@ -1176,7 +1160,7 @@ body::before {
 
 <!-- ═══ SCREEN 4: RESULT ═══ -->
 <div class="screen" id="result-screen">
-  <span class="result-pretitle">Her fate card has arrived</span>
+  <span class="result-pretitle">Your card has arrived</span>
 
   <div class="fate-card" id="fate-card">
     <div class="fate-card-outer"></div>
@@ -1265,13 +1249,13 @@ body::before {
     <button class="result-btn primary" onclick="downloadResult()">Save Card</button>
     <button class="result-btn" onclick="shareResult()">Share</button>
   </div>
-  <button class="result-new" onclick="showGenerator()">Create another card →</button>
+  <button class="result-new" onclick="resetAndRestart()">Create another card →</button>
 </div>
 
 
 <script>
 // State
-const S = { name:'', sign:'', signGlyph:'', signEpithet:'', manifest:'', manifestLatin:'', archetype:'', hair:'' };
+const S = { name:'', sign:'', signGlyph:'', signEpithet:'', manifest:'', manifestLatin:'', archetype:'', hair:'', person:'her' };
 let step = 0;
 
 function showScreen(id) {
@@ -1281,7 +1265,53 @@ function showScreen(id) {
 }
 
 function showLanding() { showScreen('landing'); }
-function showGenerator() { step = 0; updateProgress(); showScreen('generator'); }
+function showWho() { showScreen('who-screen'); }
+
+function resetAndRestart() {
+  S.name = ''; S.sign = ''; S.signGlyph = ''; S.signEpithet = '';
+  S.manifest = ''; S.manifestLatin = ''; S.archetype = ''; S.hair = ''; S.person = 'her';
+  document.getElementById('name-field').value = '';
+  document.querySelectorAll('.sign-item, .manifest-item, .arch-item, .hair-item')
+    .forEach(el => el.classList.remove('selected'));
+  showWho();
+}
+
+function setPerson(person) {
+  S.person = person;
+  showGenerator();
+}
+
+function applyPronouns() {
+  const me = S.person === 'me';
+  document.querySelector('#gs-0 .gen-step-title').textContent = me ? 'What is your name?' : 'Who is this card for?';
+  document.querySelector('#gs-0 .gen-step-sub').textContent   = me ? 'A name carries its own magic.' : 'A name carries its own magic. Give us hers.';
+  document.getElementById('name-field').placeholder           = me ? 'Your name...' : 'Her name...';
+
+  document.querySelector('#gs-1 .gen-step-title').textContent = me ? 'Under which stars were you born?' : 'Under which stars was she born?';
+  document.querySelector('#gs-1 .gen-step-sub').textContent   = me ? 'Your celestial birthright.' : 'Her celestial birthright.';
+
+  document.querySelector('#gs-2 .gen-step-title').textContent = me ? 'What do you wish to call in?' : 'What does she wish to call in?';
+  document.querySelector('#gs-2 .gen-step-sub').textContent   = me ? 'The stars will align around your intention.' : 'The stars will align around her intention.';
+
+  document.querySelector('#gs-3 .gen-step-title').textContent = me ? 'Which spirit moves through you?' : 'Which spirit moves through her?';
+  document.querySelector('#gs-3 .gen-step-sub').textContent   = me ? 'This will shape the soul of your card.' : 'This will shape the soul of her card.';
+
+  document.querySelector('#gs-4 .gen-step-title').textContent = me ? 'Your hair colour?' : 'Her hair colour?';
+  document.querySelector('#gs-4 .gen-step-sub').textContent   = me ? 'The final touch before we call your card forth.' : 'The final touch before we call her card forth.';
+}
+
+function showGenerator() {
+  step = 0;
+  document.querySelectorAll('.gen-step').forEach(s => s.classList.remove('active'));
+  document.getElementById('gs-0').classList.add('active');
+  for (let i = 0; i < 5; i++) {
+    const err = document.getElementById('err-' + i);
+    if (err) err.textContent = '';
+  }
+  applyPronouns();
+  updateProgress();
+  showScreen('generator');
+}
 
 function updateProgress() {
   for(let i=0;i<5;i++){
@@ -1330,25 +1360,21 @@ function nextGenStep(from) {
   document.getElementById('err-'+from).textContent='';
 }
 
-const loadingLines = [
-  [`Searching the stars for ${()=>S.name}...`, 'The celestial map is turning'],
-  [`Reading the signs for ${()=>S.sign}...`, 'Ancient patterns emerging'],
-  [`Weaving the fate of a ${()=>S.archetype}...`, 'The card takes its form'],
-  ['The ink dries on your fate...', 'Almost ready'],
-];
-
 async function generateFate() {
   if(!S.hair){ document.getElementById('err-4').textContent='Choose her hair.'; return; }
 
-  showScreen('loading-screen');
-
-  let idx = 0;
   const msgs = [
     [`Searching the stars for ${S.name}...`, 'The celestial map is turning'],
     [`Reading the signs for ${S.sign}...`, 'Ancient patterns emerging'],
     [`Weaving the fate of a ${S.archetype}...`, 'The card takes its form'],
     ['The ink dries on her fate...', 'Almost ready'],
   ];
+
+  let idx = 0;
+  document.getElementById('loading-main').textContent = msgs[0][0];
+  document.getElementById('loading-sub').textContent = msgs[0][1];
+  showScreen('loading-screen');
+  idx = 1;
 
   const interval = setInterval(() => {
     if(idx < msgs.length){
@@ -1373,12 +1399,13 @@ Sign: ${S.sign} (${S.signEpithet})
 Manifestation wish: ${S.manifest} (${S.manifestLatin})
 Archetype: ${S.archetype}
 Hair: ${S.hair}
+Perspective: ${S.person === 'me' ? 'second person — write directly to the recipient using you/your/yourself' : 'third person — write about her using she/her/herself'}
 
 Return ONLY a JSON object, no markdown, no backticks:
 {
   "cardName": "The [poetic title, 3-5 words, elegant, eg 'The Keeper of Tides']",
   "powerWord": "One Latin or poetic phrase (eg 'Lunaris Perpetua', 'Flos Aeterna')",
-  "prophecy": "Three sentences. Personal, poetic, uses her name ${S.name} in the first sentence. About ${S.manifest}. Speaks to her ${S.archetype} spirit. Elegant, never generic. Like Aesop copy — beautiful and slightly mysterious.",
+  "prophecy": "Three sentences. Personal, poetic, uses the name ${S.name} in the first sentence. About ${S.manifest}. Speaks to the ${S.archetype} spirit. ${S.person === 'me' ? 'Written in second person (you/your).' : 'Written in third person (she/her).'} Elegant, never generic. Like Aesop copy — beautiful and slightly mysterious.",
   "aura": "Two colours that feel like her, poetic names (eg 'Indigo & Pale Gold', 'Ash Rose & Sage')"
 }`
         }]
@@ -1393,10 +1420,13 @@ Return ONLY a JSON object, no markdown, no backticks:
 
   } catch(e) {
     clearInterval(interval);
+    const fallbackProphecy = S.person === 'me'
+      ? `${S.name}, the stars have held your name with care since long before this moment. What you seek in ${S.manifest.toLowerCase()} is not far — it has been walking toward you all along. Trust the part of yourself that already knows this to be true.`
+      : `${S.name}, the stars have held her name with care since long before this moment. What she seeks in ${S.manifest.toLowerCase()} is not far — it has been walking toward her all along. Trust the part of her that already knows this to be true.`;
     renderCard({
       cardName: `The ${S.archetype} of ${S.sign}`,
       powerWord: S.manifestLatin + ' Aeterna',
-      prophecy: `${S.name}, the stars have held your name with care since long before this moment. What you seek in ${S.manifest.toLowerCase()} is not far — it has been walking toward you all along. Trust the part of yourself that already knows this to be true.`,
+      prophecy: fallbackProphecy,
       aura: 'Soft Gold & Midnight Blue'
     });
   }
